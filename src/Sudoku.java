@@ -2,7 +2,7 @@
  * Author: Andy Lin 
  * Date: February 13, 2016
  * 
- * This application is a Sudoku Solver and Validator that utilizes a backtracking algorith to solve Sudoku puzzles. 
+ * This application is a Sudoku Solver and Validator that utilizes a backtracking algorithm to solve Sudoku puzzles. 
  * Features include puzzle solver, which generates a solution to the given Sudoku puzzle, puzzle validator, which validates a given 
  * solution to the given Sudoku puzzle, and random puzzle generator, which generates a random Sudoku puzzle for users to solve.
  * 
@@ -22,31 +22,9 @@ public class Sudoku {
 		puzzle = start;
 	}
 	
-	//Show the current puzzle
-	public void showPuzzle(){
-		for (int i = 0; i < 9 ; i++){
-			System.out.println();
-			if (i == 3 || i == 6){
-				System.out.println("-----------");
-			}
-			for (int j = 0 ; j < 9; j++){
-				//System.out.println("The item at row " + i + " and column " + j + " is " + puzzle[i][j]);
-				if (j == 3 || j == 6){
-					System.out.print("|");
-				}
-				if (puzzle[i][j] == 0){
-					System.out.print(".");
-				}
-				else {
-					System.out.print(puzzle[i][j]);
-				}
-				Graphics.updateGraphics(puzzle);
-			}
-		}
-	}
-	
 	/**
 	 * Update the current puzzle status with the given puzzle and initialize the list of empty squares on the puzzle.
+	 * This method also updates the graphics that the user sees with the given puzzle
 	 * @param puzzle
 	 * 		The current puzzle status 
 	 */
@@ -54,16 +32,7 @@ public class Sudoku {
 		this.puzzle = puzzle;
 		emptySquareStack = new Stack<Square>();
 		initializeEmptySquareToStack();
-	}
-	
-	//Set the current puzzle with the values in the given array
-	public void setPuzzle(int[] numbers){
-		int count = 0;
-		for (int i = 0; i < 9 ; i++){
-			for (int j = 0 ; j < 9; j++){
-				puzzle[i][j] = numbers[count++];
-			}
-		}
+		Graphics.updateGraphics(puzzle);
 	}
 	
 	/**
@@ -91,52 +60,14 @@ public class Sudoku {
 	public boolean validateAll(int rowAndColumnNumber){
 		for (int i = 0; i < 9 ; i++){
 			for (int j = i + 1 ; j < 9 ; j++){
-				//Check row 
+				//Check if the row is a valid row 
 				if (puzzle[rowAndColumnNumber][i] == puzzle[rowAndColumnNumber][j]){
 					System.out.println("Failed at column number " + i + " when checking row " + rowAndColumnNumber);
 					return false;
 				}
-				//Check column
+				//Check if the column is a valid column
 				if (puzzle[i][rowAndColumnNumber] == puzzle[j][rowAndColumnNumber]){
 					System.out.println("Failed at row number " + i + " when checking column " + rowAndColumnNumber);
-					return false;
-				}
-			}
-		}
-		return true;
-	}
-	 
-	/**
-	 * Determines if the given row is a valid row by checking for duplicates inside the row
-	 * @param rowNumber
-	 * 		The row number that is to be checked
-	 * @return
-	 * 		True if the given row is a valid row and false otherwise
-	 */
-	public boolean validateRow(int rowNumber){
-		for (int i = 0; i < 9 ; i++){
-			for (int j = i + 1 ; j < 9 ; j++){
-				if (puzzle[rowNumber][i] == puzzle[rowNumber][j]){
-					System.out.println("Failed at column number " + i + " when checking row " + rowNumber);
-					return false;
-				}
-			}
-		}
-		return true;
-	}
-	
-	/**
-	 * Determines if the given column is a valid column by checking for duplicates inside the column.
-	 * @param columnNumber
-	 * 		The column number that is to be checked.
-	 * @return
-	 * 		True if the column is a valid column and false otherwise.
-	 */
-	public boolean validateColumn(int columnNumber){
-		for (int i = 0; i < 9 ; i++){
-			for (int j = i + 1 ; j < 9 ; j++){
-				if (puzzle[i][columnNumber] == puzzle[j][columnNumber]){
-					System.out.println("Failed at row number " + i + " when checking column " + columnNumber);
 					return false;
 				}
 			}
@@ -146,11 +77,12 @@ public class Sudoku {
 	
 	/**
 	 * Solves the current state of the Sudoku puzzle using the backtracking algorithm.
-	 * Updates the graphics to show the solution if a valid solution can be found, shows and error message if no solution can be found.
+	 * Updates the graphics to show the solution if a valid solution can be found, shows an error message if no solution can be found.
 	 */
 	public void solveSudokuPuzzle(){
 		if (solvePuzzle()){
-			showPuzzle();
+			Graphics.updateGraphics(puzzle);
+			JOptionPane.showMessageDialog(null,"Puzzle Solved!");
 		}
 		else{
 			JOptionPane.showMessageDialog(null,"Puzzle could not be solved...");
@@ -290,6 +222,11 @@ public class Sudoku {
 		return true;
 	}
 	
+	/**
+	 * Getter method to return the current puzzle status
+	 * @return
+	 * 		The current status of the puzzle
+	 */
 	public int[][] getPuzzle(){
 		return puzzle;
 	}
