@@ -233,11 +233,14 @@ public class Graphics {
 	
 	/**
 	 * Update the two dimensional array with the current values in the text fields. 
-	 * If the text field is not a numerical value that is between 1 and 9, inform the user that only values between 1 and 9 can be entered. 
+	 * If the text field is not a numerical value that is between 1 and 9, inform the user that only values between 1 and 9 can be entered and return false. 
 	 * If the value is empty, set the array value to 0 to indicate unassigned. 
-	 * If the number entered is not a numerical value and is not empty, inform the user to enter a numerical value.
+	 * If the number entered is not a numerical value and is not empty, inform the user to enter a numerical value and return false.
+	 * @return
+	 * 		True if the puzzle is a valid puzzle (all text fields either empty or has an integer between 1 and 9)
+	 * 		False if the puzzle is invalid
 	 */
-	public void updatePuzzle(){
+	public boolean updatePuzzle(){
 		int count = 0;
 		for (int i = 0; i < 9; i++){
 			for (int j = 0 ; j < 9 ; j++){
@@ -249,10 +252,10 @@ public class Graphics {
 					if (value > 0 && value < 10){
 						puzzle[i][j] = value;
 					}
-					//Otherwise, we tell the user that the value is invalid
+					//Otherwise, we tell the user that the value is invalid and return false
 					else {
 						JOptionPane.showMessageDialog(null,"Values must be between 1 and 9!");
-						return;
+						return false;
 					}
 				}
 				//If the value the user entered was not a number, then we check if the text field was empty 
@@ -261,15 +264,17 @@ public class Graphics {
 					if (textFieldList.get(count++).getText().equals("")){
 						puzzle[i][j] = 0;
 					}
-					//Otherwise, the text field value is a symbol and we tell the user to enter a numerical value
+					//Otherwise, the text field value is a symbol and we tell the user to enter a numerical value and return false
 					else {
 						JOptionPane.showMessageDialog(null,"Please enter a numerical value!");
 						puzzle[i][j] = 0;
-						return;
+						return false;
 					}
 				}
 			}
 		}
+		//Return true if the entire puzzle has valid entries
+		return true;
 	}
 	
 	/**
@@ -277,9 +282,15 @@ public class Graphics {
 	 */
 	public void solvePuzzle(){
 		JOptionPane.showMessageDialog(null, "Solving...");
-		updatePuzzle();
-		sudokuBoard.updatePuzzle(puzzle);
-		sudokuBoard.solveSudokuPuzzle();
+		//Check to see if the puzzle has valid entries first, if it does then attempt to solve the puzzle
+		if (updatePuzzle()){
+			sudokuBoard.updatePuzzle(puzzle);
+			sudokuBoard.solveSudokuPuzzle();
+		}
+		//If the puzzle has invalid entries, then tell the user that the puzzle is invalid
+		else{
+			JOptionPane.showMessageDialog(null,"Invalid Puzzle!");
+		}
 	}
 	
 	/**
@@ -288,12 +299,18 @@ public class Graphics {
 	 */
 	public void validatePuzzle(){
 		JOptionPane.showMessageDialog(null, "Validating...");
-		updatePuzzle();
-		if(sudokuBoard.isValidSolution()){
-			JOptionPane.showMessageDialog(null,"Valid Solution!");
+		//Check to see if the puzzle has invalid entries first, if it does not, then try to validate the puzzle
+		if (updatePuzzle()){
+			if(sudokuBoard.isValidSolution()){
+				JOptionPane.showMessageDialog(null,"Valid Solution!");
+			}
+			else {
+				JOptionPane.showMessageDialog(null,"Invalid Solution!");
+			}
 		}
+		//If the puzzle has invalid entries, then tell the user that the puzzle is invalid
 		else{
-			JOptionPane.showMessageDialog(null,"Invalid Solution!");
+			JOptionPane.showMessageDialog(null,"Invalid Puzzle!");
 		}
 	}
 	
