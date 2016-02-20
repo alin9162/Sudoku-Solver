@@ -11,22 +11,14 @@
  * 		http://codefordummies.blogspot.ca/2014/01/backtracking-solve-sudoku-in-java.html
  */
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 import java.util.Stack;
 import javax.swing.JOptionPane;
 
-public class Sudoku {
+public class Backup {
 	private int[][] puzzle = new int[9][9];
 	private Stack<Square> emptySquareStack;
 	
-	private List<Set<Integer>> rowPossibleValueList; 
-	private List<Set<Integer>> columnPossibleValueList; 
-	private List<Set<Integer>> cubePossibleValueList; 
-	
-	public Sudoku(int[][] start){
+	public Backup(int[][] start){
 		puzzle = start;
 	}
 	
@@ -40,7 +32,6 @@ public class Sudoku {
 		this.puzzle = puzzle;
 		emptySquareStack = new Stack<Square>();
 		initializeEmptySquareToStack();
-		initializeSets();
 		Graphics.updateGraphics(puzzle);
 	}
 	
@@ -56,62 +47,6 @@ public class Sudoku {
 			}
 		}
 		return true;
-	}
-	
-	/**
-	 * Determines if the given input is a valid input
-	 * Returns false if there are duplicates in the row, column or cube
-	 * @return
-	 * 		True if the given puzzle input is a valid input
-	 * 		False if there is a duplicate number in the row, column or cube
-	 */
-	public boolean isValidInputPuzzle(){
-		for (int i = 0 ; i < 9 ; i++){
-			for (int j = 0; j < 9 ; j++){
-				if (puzzle[i][j] != 0){
-					if (!rowPossibleValueList.get(i).remove(puzzle[i][j])){
-						return false;
-					}
-					if(!columnPossibleValueList.get(j).remove(puzzle[i][j])){
-						return false;
-					}
-					if(!cubePossibleValueList.get(determineCube(i,j)).remove(puzzle[i][j])){
-						return false;
-					}			
-				}
-			}
-		}
-		return true;
-	}
-	
-	/**
-	 * Determines the cube number that the square is in given the row number and the column number
-	 * @param rowNumber
-	 * 		The row number that the square is in
-	 * @param columnNumber
-	 * 		The column number that the square is in
-	 * @return
-	 * 		The cube number that the square is in. Cubes are arbitrarily numbered from 0-8 starting from the top left to bottom right.
-	 * 		0 	1	2
-	 * 		3	4	5	
-	 * 		6	7	8
-	 */
-	public int determineCube(int rowNumber, int columnNumber){
-		int rowStart = rowNumber / 3;
-		int columnStart = columnNumber / 3;
-		
-		//If rowStart is 0, then the square is in the first row of cubes and is only dependent on columnStart
-		if (rowStart == 0){
-			return columnStart;
-		}
-		//If rowStart is 1, then the square is in the second row of cubes and the correct cube number can be found using columnStart + 3
-		else if (rowStart == 1){
-			return columnStart + 3;
-		}
-		//If rowStart is 2, then the square is in the third row of cubes and the correct cube number can be found using columnStart + 6
-		else{
-			return columnStart + 6;
-		}
 	}
 	
 	/**
@@ -145,18 +80,14 @@ public class Sudoku {
 	 * Updates the graphics to show the solution if a valid solution can be found, shows an error message if no solution can be found.
 	 */
 	public void solveSudokuPuzzle(){
-		if (isValidInputPuzzle()){
-			if (solvePuzzle()){
-				Graphics.updateGraphics(puzzle);
-				JOptionPane.showMessageDialog(null,"Puzzle Solved!");
-			}
-			else{
-				JOptionPane.showMessageDialog(null,"Puzzle could not be solved...");
-			}
+		if (solvePuzzle()){
+			Graphics.updateGraphics(puzzle);
+			JOptionPane.showMessageDialog(null,"Puzzle Solved!");
 		}
-		else {
-			JOptionPane.showMessageDialog(null,"Input puzzle not valid due to duplicate numbers in a row, column or cube");
+		else{
+			JOptionPane.showMessageDialog(null,"Puzzle could not be solved...");
 		}
+		
 	}
 	
 	/**
@@ -218,35 +149,6 @@ public class Sudoku {
 				if (puzzle[i][j] == 0){
 					emptySquareStack.push(new Square(i,j));
 				}
-			}
-		}
-	}
-	
-	/**
-	 * Initialize the three ArrayLists to hold nine sets that contain the current non-used values between 1 and 9.
-	 * Each ArrayList is responsible for 9 sets that correspond to the 9 rows, 9 columns and 9 cubes of the puzzle
-	 */
-	public void initializeSets(){
-		//Create the three ArrayLists to hold the possible values for the rows, columns and cubes
-		rowPossibleValueList  = new ArrayList<Set<Integer>>();
-		columnPossibleValueList  = new ArrayList<Set<Integer>>();
-		cubePossibleValueList = new ArrayList<Set<Integer>>();
-		
-		for (int i = 0 ; i < 27 ; i++){
-			//Create a new HashSet and put the values 1-9 inside of the HashSet
-			Set<Integer> set = new HashSet<Integer>();
-			for (int j = 1 ; j <= 9 ; j++){
-				set.add(j);
-			}
-			//Add 9 sets to each list
-			if (i < 9){
-				rowPossibleValueList.add(set);
-			}
-			else if (i < 18){
-				columnPossibleValueList.add(set);
-			}
-			else {
-				cubePossibleValueList.add(set);
 			}
 		}
 	}

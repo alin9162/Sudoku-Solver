@@ -18,15 +18,15 @@ import java.util.Set;
 import java.util.Stack;
 import javax.swing.JOptionPane;
 
-public class Sudoku {
+public class TestSudoku {
 	private int[][] puzzle = new int[9][9];
 	private Stack<Square> emptySquareStack;
 	
-	private List<Set<Integer>> rowPossibleValueList; 
-	private List<Set<Integer>> columnPossibleValueList; 
-	private List<Set<Integer>> cubePossibleValueList; 
+	List<Set<Integer>> rowPossibleValueList; 
+	List<Set<Integer>> columnPossibleValueList; 
+	List<Set<Integer>> cubePossibleValueList; 
 	
-	public Sudoku(int[][] start){
+	public TestSudoku(int[][] start){
 		puzzle = start;
 	}
 	
@@ -185,6 +185,55 @@ public class Sudoku {
 			int row = nextEmptySquare.getRow();
 			int column = nextEmptySquare.getColumn();
 			
+			//Check if there is a conflict in either the row , column or cube with the current number
+			if (checkRow(row,i) && checkColumn(column,i) && checkCube(row,column,i)){
+				
+				//No conflict, so we pop the empty square off of the stack and assign the value to the square.
+				emptySquareStack.pop();
+				puzzle[row][column] = i;
+				
+				//Continue solving the puzzle with the next empty square
+				if (solvePuzzle()){
+					return true;
+				}
+				
+				//The recursive call to solvePuzzle() returned false, which means we have reached a dead end and must backtrack.
+				//Assign the current square's value to 0 and push the square to the stack to show that the square is empty
+				puzzle[row][column] = 0;
+				emptySquareStack.push(nextEmptySquare);
+			}
+		}
+		//No valid number can fit in the square
+		return false;
+	}
+	
+	public boolean solvePuzzle2(){
+		//Check to see if the entire puzzle is solved by checking if there are any more empty squares.
+		//If there are no more empty squares, then return true.
+		if (emptySquareStack.isEmpty()){
+			return true;
+		}
+		
+		//Loop through all the valid numbers that can be entered into the empty square and check if that value causes a conflict in either
+		//the row, column, or cube. If no conflict arises, pop the empty square off of the stack and assign the valid number to the square.
+		//Recursively call solvePuzzle to continue solving the puzzle with one less empty square. If this call returns false, then we have reached 
+		//an empty square that cannot hold any of the possible values and we must backtrack, setting the current square to empty and pushing the current square 
+		//onto the stack to indicate it is empty. If the recursive call returns true, then we can continue with the next empty square. 
+		
+		Square nextEmptySquare = emptySquareStack.peek();
+		int row = nextEmptySquare.getRow();
+		int column = nextEmptySquare.getColumn();
+		int cube = determineCube(row,column);
+		
+		Set<Integer> rowSet = rowPossibleValueList.get(row);
+		Set<Integer> columnSet = columnPossibleValueList.get(column);
+		Set<Integer> cubeSet = cubePossibleValueList.get(cube);
+		Set<Integer> possibleNumbers = rowSet;
+		
+		possibleNumbers.retainAll(columnSet);
+		possibleNumbers.retainAll(cubeSet);
+		
+		for (Integer i : possibleNumbers){
 			//Check if there is a conflict in either the row , column or cube with the current number
 			if (checkRow(row,i) && checkColumn(column,i) && checkCube(row,column,i)){
 				
