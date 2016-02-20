@@ -23,7 +23,6 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JSeparator;
 import javax.swing.JTextField;
 import javax.swing.Box;
 
@@ -117,10 +116,6 @@ public class Graphics {
 		for(int i= 1; i <= 9; i++){
 			JPanel row = createColumn();
 			gridPanel.add(row);
-			if (i == 3){
-				JSeparator separator = new JSeparator(JSeparator.VERTICAL);
-				separator.setPreferredSize(new Dimension (10,1000));
-			}
 		}
 		
 		//Add the Sudoku board to the given JPanel container.
