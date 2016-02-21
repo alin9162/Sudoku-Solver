@@ -35,7 +35,7 @@ public class Graphics {
 	
 	private static List<JTextField> textFieldList = new ArrayList<JTextField>();
 	private int puzzle[][] = new int[9][9];
-	private TestSudoku sudokuBoard;
+	private Sudoku sudokuBoard;
 	private PuzzleBank exampleBank;
 	int[][] blankPuzzle = {{0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0}
 			,{0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0}};
@@ -70,7 +70,7 @@ public class Graphics {
 		//Create the Sudoku Board
 		createBoard(container);
 		
-		sudokuBoard = new TestSudoku(puzzle);
+		sudokuBoard = new Sudoku(puzzle);
 		exampleBank = new PuzzleBank();
 		
 		//Separation distance of 25 pixels
@@ -446,7 +446,7 @@ public class Graphics {
 	 * @return
 	 * 		Reference to the Sudoku object
 	 */
-	public TestSudoku getSudokuBoard(){
+	public Sudoku getSudokuBoard(){
 		return sudokuBoard;
 	}
 }

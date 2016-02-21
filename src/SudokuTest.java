@@ -21,7 +21,7 @@ public class SudokuTest {
 				{0,4,0,2,0,7,0,5,0},{0,5,0,0,6,0,0,7,0},{0,6,4,5,0,2,1,8,0},{0,0,0,0,0,0,0,0,0}};
 		graphics.getSudokuBoard().updatePuzzle(example2);
 		long startTime = System.nanoTime();
-		graphics.getSudokuBoard().solvePuzzle2();
+		graphics.getSudokuBoard().solvePuzzle();
 		long endTime = System.nanoTime();
 		long duration = (endTime - startTime);
 		System.out.println(duration);
