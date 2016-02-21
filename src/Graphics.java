@@ -15,22 +15,27 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BoxLayout;
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.Box;
 
 public class Graphics {
 	
 	private static List<JTextField> textFieldList = new ArrayList<JTextField>();
 	private int puzzle[][] = new int[9][9];
-	private Sudoku sudokuBoard;
+	private TestSudoku sudokuBoard;
 	private PuzzleBank exampleBank;
 	int[][] blankPuzzle = {{0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0}
 			,{0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0}};
@@ -65,7 +70,7 @@ public class Graphics {
 		//Create the Sudoku Board
 		createBoard(container);
 		
-		sudokuBoard = new Sudoku(puzzle);
+		sudokuBoard = new TestSudoku(puzzle);
 		exampleBank = new PuzzleBank();
 		
 		//Separation distance of 25 pixels
@@ -179,6 +184,7 @@ public class Graphics {
 	
 	/**
 	 * Creates a button panel and adds the button panel to the given JPanel
+	 * Also adds a scroll pane in order to let the user select which example puzzle they would like to load
 	 * @param container
 	 * 		The JPanel that the button panel will be added to 
 	 */
@@ -191,6 +197,40 @@ public class Graphics {
 		createButton("Validate Puzzle",buttons);
 		createButton("Random Puzzle", buttons);
 		createButton("New Puzzle",buttons);
+		
+		//Add a new JList with a JScrollPane to let the user select which example puzzle they would like to load
+		DefaultListModel<String> listModel = new DefaultListModel<String>();
+		
+		//Add the list elements
+		for (int i = 1 ; i <= 10 ; i++){
+			listModel.addElement("Example Puzzle " + i);
+		}
+		JList<String> list = new JList<String>(listModel);
+		
+		//Add a List Selection Listener to recognize when the user has made a selection
+		list.addListSelectionListener(new ListSelectionListener(){
+
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				//Identify which list element has been selected
+				JList source = (JList) e.getSource();
+				String item = source.getSelectedValue().toString();
+				JOptionPane.showMessageDialog(null,item + " loading...");
+				
+				//Split the string to isolate the integer value, which is the puzzle number and load that specific puzzle from the puzzle bank
+				String itemArray[] = item.split(" ");
+				sudokuBoard.updatePuzzle(exampleBank.getPuzzleNumber(Integer.parseInt(itemArray[2]) - 1));
+			}
+			
+		});
+		
+		//Set the font and dimensions of the list and scroll pane and add the scroll pane to the button panel
+		list.setFont(new Font("Calibri", Font.BOLD, 15));
+		JScrollPane scrollPane = new JScrollPane(list);
+		scrollPane.setPreferredSize(new Dimension (150,150));
+		buttons.add(scrollPane);
+		
+		//Add the button panel to the given JPanel
 		container.add(buttons);
 	}
 	
@@ -406,7 +446,7 @@ public class Graphics {
 	 * @return
 	 * 		Reference to the Sudoku object
 	 */
-	public Sudoku getSudokuBoard(){
+	public TestSudoku getSudokuBoard(){
 		return sudokuBoard;
 	}
 }

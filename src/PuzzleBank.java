@@ -70,4 +70,15 @@ public class PuzzleBank {
 		int index = rand.nextInt(exampleBank.size());
 		return exampleBank.get(index);
 	}
+	
+	/**
+	 * Get the example puzzle at the given index number.
+	 * @param num
+	 * 		The index number of the puzzle
+	 * @return
+	 * 		The puzzle at the given index
+	 */
+	public int[][] getPuzzleNumber(int num){
+		return exampleBank.get(num);
+	}
 }

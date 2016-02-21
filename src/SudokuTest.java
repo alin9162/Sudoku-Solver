@@ -20,7 +20,11 @@ public class SudokuTest {
 		int[][] example2 = {{0,0,0,0,0,0,0,0,0},{0,9,5,1,0,8,6,2,0},{0,3,0,0,5,0,0,1,0},{0,2,0,9,0,4,0,3,0},{0,0,8,0,0,0,9,0,0},
 				{0,4,0,2,0,7,0,5,0},{0,5,0,0,6,0,0,7,0},{0,6,4,5,0,2,1,8,0},{0,0,0,0,0,0,0,0,0}};
 		graphics.getSudokuBoard().updatePuzzle(example2);
-		graphics.getSudokuBoard().solvePuzzle();
+		long startTime = System.nanoTime();
+		graphics.getSudokuBoard().solvePuzzle2();
+		long endTime = System.nanoTime();
+		long duration = (endTime - startTime);
+		System.out.println(duration);
 		assertTrue(graphics.getSudokuBoard().isValidSolution());
 	}
 }
