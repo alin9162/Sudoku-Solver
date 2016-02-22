@@ -127,12 +127,10 @@ public class Sudoku {
 			for (int j = i + 1 ; j < 9 ; j++){
 				//Check if the row is a valid row 
 				if (puzzle[rowAndColumnNumber][i] == puzzle[rowAndColumnNumber][j]){
-					System.out.println("Failed at column number " + i + " when checking row " + rowAndColumnNumber);
 					return false;
 				}
 				//Check if the column is a valid column
 				if (puzzle[i][rowAndColumnNumber] == puzzle[j][rowAndColumnNumber]){
-					System.out.println("Failed at row number " + i + " when checking column " + rowAndColumnNumber);
 					return false;
 				}
 			}
