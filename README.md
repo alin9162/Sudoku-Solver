@@ -9,26 +9,26 @@ To run the application, use any Java IDE (examples include Eclipse, IntelliJ) an
 
 ###Screenshots  
 Below are screenshots of the application:  
-  
-  
+
 ![Main Layout](screenshots/start_screen.png)  
+
 This shows the main layout of the application. Input a valid Sudoku puzzle and press the "Solve Puzzle" button to generate the solution to 
 the puzzle. Input a solution to a Sudoku puzzle and press the "Validate Puzzle" button to determine if the solution is a valid solution. Generate 
 a random puzzle out of the 10 example puzzles by pressing the "Random Puzzle" button. Clear the current contents of the puzzle by pressing the 
-"Clear Puzzle" button. You may also select any of the 10 example puzzles by using the list provided to the right of the buttons.  
-  
-  
+"Clear Puzzle" button. You may also select any of the 10 example puzzles by using the list provided to the right of the buttons.      
+
 ![Example Puzzle 1](screenshots/example_puzzle_1.png)  
+
 A screenshot of example puzzle 1.  
-  
-  
+ 
 ![Example Puzzle 1 Solved](screenshots/example_puzzle_1_solved.png)  
+
 A screenshot of example puzzle 1 after it has been solved.  
-  
-   
+
 ###Additional features in the future  
 Implement support for multiple sizes of Sudoku puzzles.  
   
-###Authors  
+###Author  
 Andy Lin  
+February 2016
 	
